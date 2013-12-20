@@ -3,8 +3,9 @@ Blog::Application.routes.draw do
   devise_for :users
   ActiveAdmin.routes(self)
 
-  resources :discussions
-  resources :articles
+  resources :articles do
+    resources :discussions
+  end
 
   get 'about' => "static_pages#about"
   # The priority is based upon order of creation: first created -> highest priority.

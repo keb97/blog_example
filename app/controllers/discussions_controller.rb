@@ -2,6 +2,7 @@ class DiscussionsController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show]
   before_action :set_discussion, only: [:show, :edit, :update, :destroy]
   before_action :correct_user, only: [:edit, :update, :destroy]
+  before_action :find_article
 
   # GET /discussions
   def index
@@ -14,7 +15,7 @@ class DiscussionsController < ApplicationController
 
   # GET /discussions/new
   def new
-    @discussion = current_user.discussions.build
+    @discussion = @article.discussions.build
   end
 
   # GET /discussions/1/edit
@@ -23,10 +24,11 @@ class DiscussionsController < ApplicationController
 
   # POST /discussions
   def create
-    @discussion = current_user.discussions.build(discussion_params)
+    @discussion = @article.discussions.build(discussion_params)
+    @discussion.user = current_user
 
     if @discussion.save
-      redirect_to @discussion, notice: 'Discussion was successfully created.'
+      redirect_to [@article, @discussion], notice: 'Discussion was successfully created.'
     else
       render action: 'new'
     end
@@ -35,7 +37,7 @@ class DiscussionsController < ApplicationController
   # PATCH/PUT /discussions/1
   def update
     if @discussion.update(discussion_params)
-      redirect_to @discussion, notice: 'Discussion was successfully updated.'
+      redirect_to [@article, @discussion], notice: 'Discussion was successfully updated.'
     else
       render action: 'edit'
     end
@@ -44,7 +46,7 @@ class DiscussionsController < ApplicationController
   # DELETE /discussions/1
   def destroy
     @discussion.destroy
-    redirect_to discussions_url, notice: 'Discussion was successfully deleted.'
+    redirect_to @article, notice: 'Discussion was successfully deleted.'
   end
 
   private
@@ -56,11 +58,15 @@ class DiscussionsController < ApplicationController
     # Checks if the user is authorized to perform tha action
     def correct_user
       @discussion = current_user.discussions.find_by_id(params[:id])
-      redirect_to discussions_path, noitce: 'Not authorized to change this Discussion' if @discussion.nil?
+      redirect_to article_path, notice: 'Not authorized to change this Discussion' if @discussion.nil?
     end  
 
     # Only allow a trusted parameter "white list" through.
     def discussion_params
       params.require(:discussion).permit(:comment, :user_id, :article_id)
+    end
+
+    def find_article
+      @article = Article.find(params[:article_id])
     end
 end

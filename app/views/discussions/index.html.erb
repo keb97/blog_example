@@ -16,7 +16,7 @@
     <% @discussions.each do |discussion| %>
       <tr>
         <td><%= discussion.comment %></td>
-        <td><%= discussion.user %></td>
+        <td><%= discussion.user.name %></td>
         <td><%= discussion.article %></td>
         <td><%= link_to 'Show', discussion %></td>
         <% if discussion.user == current_user %>

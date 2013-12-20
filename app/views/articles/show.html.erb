@@ -10,8 +10,18 @@
 
 <p>
   <strong>Discussion:</strong>
-  <%#= @article.discussion %>
+  <% @article.discussions.each do |p| %>
+  <p><%= p.comment %><p>
+  <p><%= link_to "show comment", article_discussion_path(@article, p) %><p>
+  <p><%= link_to "edit comment", edit_article_discussion_path(@article, p)  %><p>
+  <p><%= link_to "delete comment", [@article, p], method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  <% end %>
 </p>
+
+<p>
+	<%= link_to "New discussion", new_article_discussion_path(@article) %>
+</p>
+<p>
 
 <% if @article.user == current_user %>
   <%= link_to 'Edit', edit_article_path(@article) %> |
