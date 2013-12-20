@@ -1,0 +1,19 @@
+<p>
+  <strong>Comment:</strong>
+  <%= @discussion.comment %>
+</p>
+
+<p>
+  <strong>User:</strong>
+  <%= @discussion.user %>
+</p>
+
+<p>
+  <strong>Article:</strong>
+  <%= @discussion.article %>
+</p>
+
+<% if @discussion.user == current_user %>
+  <%= link_to 'Edit', edit_discussion_path(@discussion) %> |
+<% end %>  
+<%= link_to 'Back', discussions_path %>

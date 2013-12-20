@@ -1,0 +1,19 @@
+<p>
+  <strong>Title:</strong>
+  <%= @article.title %>
+</p>
+
+<p>
+  <strong>Content:</strong>
+  <%= @article.content %>
+</p>
+
+<p>
+  <strong>Discussion:</strong>
+  <%#= @article.discussion %>
+</p>
+
+<% if @article.user == current_user %>
+  <%= link_to 'Edit', edit_article_path(@article) %> |
+<% end %>  
+<%= link_to 'Back', articles_path %>
